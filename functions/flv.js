@@ -7,20 +7,22 @@ export async function onRequest(context) {
     return new Response("Missing ?url=", { status: 400 })
   }
 
-  // Header pura-pura browser
   const headers = new Headers()
+
+  // Penting buat seek video
   const range = request.headers.get("Range")
   if (range) headers.set("Range", range)
 
-  headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
-  headers.set("Referer", "https://live3.procdnlive.com/")
-  headers.set("Origin", "https://live3.procdnlive.com")
+  // Header yang server HARAPKAN
+  headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36")
+  headers.set("Referer", "https://xlz.livecdnem.com/")
+  headers.set("Origin", "https://xlz.livecdnem.com")
+  headers.set("Accept", "*/*")
 
   const response = await fetch(videoUrl, {
     headers,
     cf: {
-      cacheEverything: true,
-      cacheTtl: 3600
+      cacheEverything: false
     }
   })
 
