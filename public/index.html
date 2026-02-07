@@ -4,21 +4,71 @@
   <meta charset="UTF-8">
   <title>FLV Player</title>
   <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
+
+  <style type="text/css">
+    html, body {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        background: black;
+        overflow: hidden;
+    }
+    .player {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        object-fit: contain;
+    }
+
+    /* Widget Overlay */
+    #widget-overlay {
+        position: absolute;
+        bottom: 70px;
+        left: 0;
+        width: 100%;
+        height: auto;
+        z-index: 10000;
+        pointer-events: none;
+        text-align: center;
+        color: white;
+        font-size: 20px;
+    }
+  </style>
 </head>
+
 <body>
-  <h2>Cloudflare FLV Player</h2>
-  <video id="video" controls width="800"></video>
+
+  <video id="video" class="player" controls></video>
+
+  <!-- Contoh overlay (bisa diisi script/widget iklan dll) -->
+  <div id="widget-overlay">
+    <!-- Widget muncul di atas video -->
+  </div>
 
   <script>
     if (flvjs.isSupported()) {
       const player = flvjs.createPlayer({
         type: 'flv',
-        url: '/flv?url=http://live3.procdnlive.com/livecdn/channel80.flv?auth_key=3000001770465924-0-0-3860029accd33ced8709c37f01be2402'
+        url: '/flv?url=http://live3.procdnlive.com/livecdn/channel80.flv?auth_key=3000001770465924-0-0-3860029accd33ced8709c37f01be2402',
+        isLive: true
       })
-      player.attachMediaElement(document.getElementById('video'))
+
+      const videoElement = document.getElementById('video')
+      player.attachMediaElement(videoElement)
       player.load()
       player.play()
+
+      // Auto reconnect kalau stream putus
+      player.on(flvjs.Events.ERROR, () => {
+        console.log("Stream error, reconnecting...")
+        player.unload()
+        player.load()
+        player.play()
+      })
     }
   </script>
+
 </body>
 </html>
