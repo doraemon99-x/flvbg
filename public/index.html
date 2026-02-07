@@ -39,7 +39,7 @@ html, body {
 
 <script>
 const params = new URLSearchParams(window.location.search)
-const stream = params.get("url") || "http://live3.procdnlive.com/livecdn/channel80.flv"
+const stream = params.get("url") || "http://live3.procdnlive.com/livecdn/channel80.flv?auth_key=3000001770465924-0-0-3860029accd33ced8709c37f01be2402"
 
 if (flvjs.isSupported()) {
   const video = document.getElementById("video")
