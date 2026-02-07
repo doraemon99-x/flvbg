@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>FLV Player</title>
+  <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
+</head>
+<body>
+  <h2>Cloudflare FLV Player</h2>
+  <video id="video" controls width="800"></video>
+
+  <script>
+    if (flvjs.isSupported()) {
+      const player = flvjs.createPlayer({
+        type: 'flv',
+        url: '/flv?url=https://example.com/video.flv'
+      })
+      player.attachMediaElement(document.getElementById('video'))
+      player.load()
+      player.play()
+    }
+  </script>
+</body>
+</html>
