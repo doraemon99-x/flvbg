@@ -2,6 +2,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<title>DPlayer FLV</title>
+
+<!-- DPlayer -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+
+<!-- FLV.js (wajib untuk FLV) -->
 <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
 
 <style>
@@ -9,60 +16,39 @@ html, body {
   margin: 0;
   height: 100%;
   background: black;
-  overflow: hidden;
 }
-
-#video {
+#dplayer {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  background: black;
-}
-
-#widget-overlay {
-  position: absolute;
-  bottom: 70px;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-  pointer-events: none;
-  text-align: center;
-  color: white;
 }
 </style>
 </head>
 
 <body>
-
-<video id="video" controls autoplay></video>
-<div id="widget-overlay"></div>
+<div id="dplayer"></div>
 
 <script>
 const params = new URLSearchParams(window.location.search)
-const stream = params.get("url") || "http://live3.procdnlive.com/livecdn/channel80.flv?auth_key=3000001770465924-0-0-3860029accd33ced8709c37f01be2402"
+const stream = params.get("url") || "https://live1.pro2cdnlive.com/live/channel13.flv?wsSecret=38a3a29a208f5dcbd28bbbaa63db3d4a&wsABSTime=1770527185"
 
-if (flvjs.isSupported()) {
-  const video = document.getElementById("video")
+const dp = new DPlayer({
+  container: document.getElementById('dplayer'),
+  live: true,
+  autoplay: true,
+  video: {
+    url: '/flv?url=' + encodeURIComponent(stream),
+    type: 'flv'
+  }
+})
 
-  const player = flvjs.createPlayer({
-    type: "flv",
-    url: "/flv?url=" + encodeURIComponent(stream),
-    isLive: true,
-    cors: true
+// Auto reconnect kalau stream drop
+dp.on('error', () => {
+  console.log("DPlayer error, reconnecting...")
+  dp.switchVideo({
+    url: '/flv?url=' + encodeURIComponent(stream),
+    type: 'flv'
   })
-
-  player.attachMediaElement(video)
-  player.load()
-  player.play()
-
-  // Auto reconnect kalau stream drop
-  player.on(flvjs.Events.ERROR, (errType, errDetail) => {
-    console.log("FLV error:", errType, errDetail)
-    player.unload()
-    player.load()
-    player.play()
-  })
-}
+})
 </script>
 
 </body>
