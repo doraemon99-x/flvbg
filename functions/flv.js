@@ -15,8 +15,8 @@ export async function onRequest(context) {
 
   // Spoof browser biar lolos proteksi CDN
   headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
-  headers.set("Referer", "https://xlz.livecdnem.com/")
-  headers.set("Origin", "https://xlz.livecdnem.com")
+  headers.set("Referer", "https://xlz.buzzscorelinez.com/")
+  headers.set("Origin", "https://xlz.buzzscorelinez.com")
 
   const response = await fetch(videoUrl, {
     headers,
